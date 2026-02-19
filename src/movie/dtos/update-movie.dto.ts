@@ -1,13 +1,4 @@
-export class UpdateMovieDto {
-  title?: string;
+import { PartialType } from '@nestjs/swagger';
+import { CreateMovieDto } from 'src/movie/dtos/create-movie.dto';
 
-  releaseYear?: number;
-
-  contentRating?: any;
-
-  length?: number;
-
-  genres?: any;
-
-  outline?: string;
-}
+export class UpdateMovieDto extends PartialType(CreateMovieDto) {}
