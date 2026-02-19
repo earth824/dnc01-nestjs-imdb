@@ -1,0 +1,92 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/database/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum Role {
+  ADMIN
+  SUPER_ADMIN
+  USER
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  password  String
+  role      Role      @default(USER)
+  firstName String?   @map("first_name")
+  lastName  String?   @map("last_name")
+  dob       DateTime? @db.Date
+  gender    Gender?
+  status    Boolean   @default(true)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz()
+  reviews   Review[]
+
+  @@map("users")
+}
+
+enum ContentRating {
+  G
+  PG
+  PG_13
+  R
+  NC_17
+}
+
+enum Genre {
+  ACTION
+  COMEDY
+  DRAMA
+  THRILLER
+  ROMANCE
+  SCI_FI
+  HORROR
+  ANIMATION
+}
+
+model Movie {
+  id            Int            @id @default(autoincrement())
+  title         String
+  releaseYear   Int?           @map("release_year") @db.SmallInt
+  contentRating ContentRating? @map("content_rating")
+  length        Int?           @db.SmallInt
+  posterUrl     String?        @map("poster_url")
+  genres        Genre[]
+  outline       String?
+  ratingSum     Int            @default(0) @map("rating_sum")
+  ratingCount   Int            @default(0) @map("rating_count")
+  averageRating Decimal        @default(0) @map("average_rating") @db.Decimal(4, 2)
+  createdAt     DateTime       @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt     DateTime       @updatedAt @map("updated_at") @db.Timestamptz()
+  reviews       Review[]
+
+  @@map("movies")
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  movieId   Int      @map("movie_id")
+  rate      Int      @db.SmallInt
+  title     String
+  message   String?
+  status    Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie     Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, movieId])
+  @@map("reviews")
+}
