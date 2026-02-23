@@ -24,5 +24,6 @@ export class AuthService {
 
     // sign jwt
     // return jwt and user
+    return { accessToken: '', user };
   }
 }
