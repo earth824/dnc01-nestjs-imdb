@@ -1,5 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { RegisterDto } from 'src/auth/dtos/register.dto';
+import { AuthTokenService } from 'src/auth/services/auth-token.service';
 import { LoginResponse } from 'src/auth/types/response.type';
 import { BcryptService } from 'src/share/hash/bcrypt.service';
 import { UserService } from 'src/user/user.service';
@@ -8,7 +9,8 @@ import { UserService } from 'src/user/user.service';
 export class AuthService {
   constructor(
     private readonly userService: UserService,
-    private readonly bcryptService: BcryptService
+    private readonly bcryptService: BcryptService,
+    private readonly authTokenService: AuthTokenService
   ) {}
 
   async register(registerDto: RegisterDto): Promise<void> {
@@ -22,8 +24,12 @@ export class AuthService {
     const isMatch = await this.bcryptService.compare(password, user.password);
     if (!isMatch) throw new UnauthorizedException('Invalid credentials');
 
-    // sign jwt
-    // return jwt and user
-    return { accessToken: '', user };
+    const accessToken = await this.authTokenService.sign({
+      sub: user.id,
+      email: user.email,
+      role: user.role
+    });
+
+    return { accessToken, user };
   }
 }

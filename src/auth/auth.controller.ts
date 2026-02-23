@@ -7,7 +7,7 @@ import {
   Patch,
   Post
 } from '@nestjs/common';
-import { AuthService } from 'src/auth/auth.service';
+import { AuthService } from 'src/auth/services/auth.service';
 import { LoginDto } from 'src/auth/dtos/login.dto';
 import { RegisterDto } from 'src/auth/dtos/register.dto';
 import { LoginResponse } from 'src/auth/types/response.type';
