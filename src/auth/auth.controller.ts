@@ -12,6 +12,8 @@ import { LoginDto } from 'src/auth/dtos/login.dto';
 import { RegisterDto } from 'src/auth/dtos/register.dto';
 import { LoginResponse } from 'src/auth/types/response.type';
 import { Public } from 'src/auth/decorators/public.decorator';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { User } from 'src/database/generated/prisma/client';
 
 @Controller('auth')
 export class AuthController {
@@ -32,7 +34,9 @@ export class AuthController {
   }
 
   @Get('me')
-  getMe() {}
+  getMe(@CurrentUser('sub') id: number): Promise<User> {
+    return this.authService.getMe(id);
+  }
 
   @Patch('me/password')
   updatePassword() {}

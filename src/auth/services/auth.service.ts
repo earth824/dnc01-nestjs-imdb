@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { RegisterDto } from 'src/auth/dtos/register.dto';
 import { AuthTokenService } from 'src/auth/services/auth-token.service';
 import { LoginResponse } from 'src/auth/types/response.type';
+import { User } from 'src/database/generated/prisma/client';
 import { BcryptService } from 'src/share/hash/bcrypt.service';
 import { UserService } from 'src/user/user.service';
 
@@ -31,5 +32,9 @@ export class AuthService {
     });
 
     return { accessToken, user };
+  }
+
+  async getMe(id: number): Promise<User> {
+    return this.userService.findById(id);
   }
 }
