@@ -10,6 +10,7 @@ import { AuthTokenService } from './services/auth-token.service';
 @Module({
   imports: [UserModule, HashModule, JwtModule.registerAsync(jwtConfigOptions)],
   controllers: [AuthController],
-  providers: [AuthService, AuthTokenService]
+  providers: [AuthService, AuthTokenService],
+  exports: [AuthTokenService]
 })
 export class AuthModule {}

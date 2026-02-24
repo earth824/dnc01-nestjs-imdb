@@ -11,17 +11,20 @@ import { AuthService } from 'src/auth/services/auth.service';
 import { LoginDto } from 'src/auth/dtos/login.dto';
 import { RegisterDto } from 'src/auth/dtos/register.dto';
 import { LoginResponse } from 'src/auth/types/response.type';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Public()
   @Post('register')
   async register(@Body() registerDto: RegisterDto): Promise<string> {
     await this.authService.register(registerDto);
     return 'registered successfully';
   }
 
+  @Public()
   @HttpCode(HttpStatus.OK)
   @Post('login')
   login(@Body() loginDto: LoginDto): Promise<LoginResponse> {

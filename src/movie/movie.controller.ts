@@ -1,4 +1,5 @@
 import { Controller, Post, Get, Patch, Delete, Body } from '@nestjs/common';
+import { Public } from 'src/auth/decorators/public.decorator';
 import { CreateMovieDto } from 'src/movie/dtos/create-movie.dto';
 import { UpdateMovieDto } from 'src/movie/dtos/update-movie.dto';
 
@@ -7,9 +8,11 @@ export class MovieController {
   @Post()
   createMovie(@Body() createMovieDto: CreateMovieDto) {}
 
+  @Public()
   @Get()
   findMovies() {}
 
+  @Public()
   @Get(':id')
   findMovieById() {}
 
