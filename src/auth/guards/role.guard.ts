@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  ForbiddenException,
+  Injectable
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
 import { ROLES } from 'src/auth/decorators/roles.decorator';
@@ -19,7 +24,10 @@ export class RoleGuard implements CanActivate {
     const userRole = request.user?.role;
     if (!userRole) throw new Error('Role cannot used without authentication');
 
-    if (!roles.includes(userRole)) return false;
+    if (!roles.includes(userRole))
+      throw new ForbiddenException(
+        'Insufficient permission to perform this action'
+      );
 
     return true;
   }

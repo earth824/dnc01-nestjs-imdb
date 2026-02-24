@@ -7,6 +7,7 @@ import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from './config/config.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { RoleGuard } from 'src/auth/guards/role.guard';
 
 @Module({
   imports: [
@@ -17,6 +18,9 @@ import { AuthGuard } from 'src/auth/guards/auth.guard';
     DatabaseModule,
     ConfigModule
   ],
-  providers: [{ provide: APP_GUARD, useClass: AuthGuard }]
+  providers: [
+    { provide: APP_GUARD, useClass: AuthGuard },
+    { provide: APP_GUARD, useClass: RoleGuard }
+  ]
 })
 export class AppModule {}

@@ -7,6 +7,7 @@ import { User } from 'src/database/generated/prisma/client';
 import { PrismaClientKnownRequestError } from 'src/database/generated/prisma/internal/prismaNamespace';
 import { PrismaService } from 'src/database/prisma.service';
 import { BcryptService } from 'src/share/hash/bcrypt.service';
+import { CreateAdminDto } from 'src/user/dtos/create-admin.dto';
 import { CreateUserDto } from 'src/user/dtos/create-user.dto';
 
 @Injectable()
@@ -44,5 +45,9 @@ export class UserService {
     const user = await this.prisma.user.findUnique({ where: { id } });
     if (!user) throw new NotFoundException('User with provided id not found');
     return user;
+  }
+
+  async createAdmin(createAdminDto: CreateAdminDto): Promise<void> {
+    await this.createUser({ ...createAdminDto, role: 'ADMIN' });
   }
 }
